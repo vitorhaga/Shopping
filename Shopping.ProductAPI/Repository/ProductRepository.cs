@@ -25,7 +25,7 @@ namespace Shopping.ProductAPI.Repository
         public async Task<ProductDto> FindById(long id)
         {
             Product products = await _context.Products.Where(p => p.Id == id)
-                                                      .FirstOrDefaultAsync();
+                                                      .FirstOrDefaultAsync() ?? new Product();
             return _mapper.Map<ProductDto>(products);
         }
 
@@ -49,8 +49,8 @@ namespace Shopping.ProductAPI.Repository
             try
             {
                 Product products = await _context.Products.Where(p => p.Id == id)
-                                                      .FirstOrDefaultAsync();
-                if(products is Product)
+                                                      .FirstOrDefaultAsync() ?? new Product();
+                if(products is Product and { Id: > 0})
                 {
                     _context.Products.Remove(products);
                     await _context.SaveChangesAsync();

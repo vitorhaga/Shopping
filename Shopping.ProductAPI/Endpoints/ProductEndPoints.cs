@@ -12,7 +12,7 @@ namespace Shopping.ProductAPI.EndPoints
             productEndpoint.MapGet(pattern: "FindById", handler: async (IProductRepository repository, long id) => 
             {
                 var product = await repository.FindById(id);
-                if (product is null)
+                if (product is ProductDto and { Id: <= 0})
                     return Results.NotFound();
 
                 return Results.Ok(product);
