@@ -54,7 +54,6 @@ namespace Shopping.ProductAPI.EndPoints
                     return Results.BadRequest();
                 return Results.Ok(response);
             });
-
         }
     }
 }
