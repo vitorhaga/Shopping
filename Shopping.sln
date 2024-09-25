@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.ProductAPI", "Shop
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{15F79844-6644-45C1-9197-EBEF2E89A8D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.IdentityServer", "Shopping.IdentityServer\Shopping.IdentityServer.csproj", "{41A44399-FCEA-4061-BCD6-FCA2940D81E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5A4286C8-3B2A-48EA-9A7F-B7A32A15E1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A4286C8-3B2A-48EA-9A7F-B7A32A15E1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A4286C8-3B2A-48EA-9A7F-B7A32A15E1C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41A44399-FCEA-4061-BCD6-FCA2940D81E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41A44399-FCEA-4061-BCD6-FCA2940D81E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41A44399-FCEA-4061-BCD6-FCA2940D81E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41A44399-FCEA-4061-BCD6-FCA2940D81E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{31C32D9C-500C-4FAF-BF2B-7655A2259201} = {1C0A7D60-057D-45EB-A2E8-67A4DAD0EAFF}
 		{5A4286C8-3B2A-48EA-9A7F-B7A32A15E1C7} = {B0A0EED4-31FB-41DE-8005-C81E6ADDF334}
+		{41A44399-FCEA-4061-BCD6-FCA2940D81E8} = {B0A0EED4-31FB-41DE-8005-C81E6ADDF334}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5939E87B-74B9-4008-B8FE-C03DFDB40341}

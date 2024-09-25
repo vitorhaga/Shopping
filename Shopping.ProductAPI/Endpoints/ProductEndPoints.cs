@@ -1,4 +1,5 @@
-﻿using Shopping.ProductAPI.Data.Dto;
+﻿using Microsoft.AspNetCore.Mvc;
+using Shopping.ProductAPI.Data.Dto;
 using Shopping.ProductAPI.Repository;
 
 namespace Shopping.ProductAPI.EndPoints
@@ -16,7 +17,7 @@ namespace Shopping.ProductAPI.EndPoints
                     return Results.NotFound();
 
                 return Results.Ok(product);
-            });
+            }).RequireAuthorization();
             
             productEndpoint.MapGet(pattern: "FindAll", handler: async (IProductRepository repository) =>
             {
@@ -25,9 +26,9 @@ namespace Shopping.ProductAPI.EndPoints
                     return Results.NotFound();
 
                 return Results.Ok(product);
-            });
+            }).RequireAuthorization();
 
-            productEndpoint.MapPost(pattern: "Create", handler: async (IProductRepository repository, ProductDto productDto) =>
+            productEndpoint.MapPost(pattern: "Create", handler: async (IProductRepository repository, [FromBody] ProductDto productDto) =>
             {
                 if (productDto is null)
                     return Results.BadRequest();
@@ -35,9 +36,9 @@ namespace Shopping.ProductAPI.EndPoints
                 var product = await repository.Create(productDto);
 
                 return Results.Ok(product);
-            }); 
-            
-            productEndpoint.MapPut(pattern: "Update", handler: async (IProductRepository repository, ProductDto productDto) =>
+            }).RequireAuthorization();
+
+            productEndpoint.MapPut(pattern: "Update", handler: async (IProductRepository repository, [FromBody] ProductDto productDto) =>
             {
                 if (productDto is null)
                     return Results.BadRequest();
@@ -45,7 +46,7 @@ namespace Shopping.ProductAPI.EndPoints
                 var product = await repository.Update(productDto);
 
                 return Results.Ok(product);
-            });
+            }).RequireAuthorization();
 
             productEndpoint.MapDelete(pattern: "Delete", handler: async (IProductRepository repository, long id) =>
             {
@@ -53,7 +54,7 @@ namespace Shopping.ProductAPI.EndPoints
                 if (response is false)
                     return Results.BadRequest();
                 return Results.Ok(response);
-            });
+            }).RequireAuthorization("Admin");
         }
     }
 }

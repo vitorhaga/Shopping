@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shopping.Web.Models;
 using System.Diagnostics;
@@ -27,6 +28,15 @@ namespace Shopping.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [Authorize]
+        public async Task<IActionResult> Login()
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Loggout()
+        {
+            return SignOut("Cookies", "oidc");
         }
     }
 }
