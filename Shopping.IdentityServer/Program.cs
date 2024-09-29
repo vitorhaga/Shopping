@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Shopping.IdentityServer;
+using Microsoft.IdentityModel.Logging;
 using Shopping.IdentityServer.Configuration;
 using Shopping.IdentityServer.Initializer;
 using Shopping.IdentityServer.Model;
@@ -20,6 +20,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 var builderServices = builder.Services.AddIdentityServer(options =>
 {
+    options.IssuerUri = builder.Configuration["ServiceUrls:IdentityServer"];
     options.Events.RaiseErrorEvents = true;
     options.Events.RaiseInformationEvents = true;
     options.Events.RaiseFailureEvents = true;
@@ -36,7 +37,11 @@ builder.Services.AddScoped<IDbInitializer, Dbinitializer>();
 //builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builderServices.AddDeveloperSigningCredential();
+
 builder.Services.AddControllersWithViews();
+
+IdentityModelEventSource.ShowPII = true;
+System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
 var app = builder.Build();
 
@@ -46,6 +51,7 @@ var initializer = app.Services.CreateScope().ServiceProvider.GetService<IDbIniti
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();

@@ -1,19 +1,22 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Logging;
 using Shopping.Web.Services;
 using Shopping.Web.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IProductService, ProductService>(
     c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"])
 );
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies";
     options.DefaultChallengeScheme = "oidc";
-}).AddCookie("Cookies", c => c.ExpireTimeSpan = TimeSpan.FromMinutes(10))
+})
+  .AddCookie("Cookies", c => c.ExpireTimeSpan = TimeSpan.FromMinutes(10))
   .AddOpenIdConnect("oidc", options =>
   {
      options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
@@ -28,6 +31,10 @@ builder.Services.AddAuthentication(options =>
      options.Scope.Add("shopping");
      options.SaveTokens = true;
   });
+
+IdentityModelEventSource.ShowPII = true;
+System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +42,7 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
