@@ -48,8 +48,8 @@ namespace Shopping.IdentityServer.Configuration
                         new Secret("Shopping_api_Secret_encoded".Sha256())
                     },
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = {"http://localhost:35077/signin-oidc"},
-                    PostLogoutRedirectUris = {"http://localhost:35077/singout-callback-oidc"},
+                    RedirectUris = {"https://localhost:4430/signin-oidc"},
+                    PostLogoutRedirectUris = {"https://localhost:4430/singout-callback-oidc"},
                     AllowedScopes = new List<String>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

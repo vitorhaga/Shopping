@@ -29,8 +29,8 @@ namespace IdentityServerHost.Quickstart.UI
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
@@ -56,8 +56,8 @@ namespace IdentityServerHost.Quickstart.UI
             _identityProviderStore = identityProviderStore;
             _events = events;
 
-            _userManager = userManager;
             _roleManager = roleManager;
+            _userManager = userManager;
             _signInManager = signInManager;
         }
 

@@ -44,7 +44,7 @@ namespace Shopping.IdentityServer.Initializer
                 FirstName = "Vitor",
                 LastName = "Admin"
             };
-
+            //aqui a senha precisa ter uma maiuscula, minuscula, um numero e um caracter especial se não da um erro padrão
             _user.CreateAsync(admin,"VitorHaga10$").GetAwaiter().GetResult();
             _user.AddToRoleAsync(admin, IdentityConfiguration.Admin)
                 .GetAwaiter()
@@ -66,7 +66,7 @@ namespace Shopping.IdentityServer.Initializer
                 FirstName = "Vitor",
                 LastName = "Client"
             };
-
+            //aqui a senha precisa ter uma maiuscula, minuscula, um numero e um caracter especial se não da um erro padrão
             _user.CreateAsync(client,"VitorHaga10$").GetAwaiter().GetResult();
             _user.AddToRoleAsync(client, IdentityConfiguration.Client)
                 .GetAwaiter()
