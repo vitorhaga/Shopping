@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Logging;
 using Shopping.Web.Services;
 using Shopping.Web.Services.IServices;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +29,10 @@ builder.Services.AddAuthentication(options =>
      options.ClaimActions.MapJsonKey("sub", "sub", "sub");
      options.TokenValidationParameters.NameClaimType = "name";
      options.TokenValidationParameters.NameClaimType = "role";
+     options.SignedOutCallbackPath = @"/singout-callback-oidc"; //adicionado, pois PostLogoutRedirectUris = {"https://localhost:4430/singout-callback-oidc"}, no IdentityConfiguration não estava funcionando, dessa forma ele consegue enxergar o PostLogoutRedirectUris
      options.Scope.Add("shopping");
      options.SaveTokens = true;
   });
-
-IdentityModelEventSource.ShowPII = true;
-System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
 var app = builder.Build();
 

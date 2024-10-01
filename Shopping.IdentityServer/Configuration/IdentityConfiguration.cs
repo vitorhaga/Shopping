@@ -49,7 +49,7 @@ namespace Shopping.IdentityServer.Configuration
                     },
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = {"https://localhost:4430/signin-oidc"},
-                    PostLogoutRedirectUris = {"https://localhost:4430/singout-callback-oidc"},
+                    PostLogoutRedirectUris = {"https://localhost:4430/singout-callback-oidc"},// necessário adicionar options.SignedOutCallbackPath = @"/singout-callback-oidc"; na Program do front-end, para que a view LoggedOut receba o modelo com o PostLogoutRedirectUri
                     AllowedScopes = new List<String>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
