@@ -15,6 +15,8 @@ using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Identity;
 using Shopping.IdentityServer.Model;
+using Shopping.IdentityServer.MainModule.Account;
+using System.Security.Claims;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -250,7 +252,95 @@ namespace IdentityServerHost.Quickstart.UI
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Register(string returnUrl)
+        {
+            var viewModel = await BuildRegisterViewModelAsync();
+            return View(viewModel);
+        }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null) 
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    EmailConfirmed = true,
+                    FirstName = model.FirstName, 
+                    LastName = model.LastName
+                };
+                //cria o usuario
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if(result.Succeeded)
+                {
+                    //se a role existir ele vincular o usuario ao role
+                    if(!_roleManager.RoleExistsAsync(model.RoleName).GetAwaiter().GetResult())
+                    {
+                        var userRole = new IdentityRole
+                        {
+                            Name = model.RoleName,
+                            NormalizedName = model.RoleName,
+                        };
+                        await _roleManager.CreateAsync(userRole);
+                    }
+
+                    //vinculação da role
+                    await _userManager.AddToRoleAsync(user, model.RoleName);
+
+                    //adição das Claims do novo usuario
+                    await _userManager.AddClaimsAsync(user, new Claim[]{
+                    new Claim(JwtClaimTypes.Name, model.UserName),
+                    new Claim(JwtClaimTypes.Email, model.Email),
+                    new Claim(JwtClaimTypes.FamilyName, model.FirstName),
+                    new Claim(JwtClaimTypes.GivenName, model.LastName),
+                    new Claim(JwtClaimTypes.WebSite, $"http://{model.UserName}.com"),
+                    new Claim(JwtClaimTypes.Role,"User") });
+
+                    var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+                    var loginresult = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, lockoutOnFailure: true);
+
+                    if (loginresult.Succeeded)
+                    {
+                        var checkuser = await _userManager.FindByNameAsync(model.UserName);
+                        await _events.RaiseAsync(new UserLoginSuccessEvent(checkuser.UserName, checkuser.Id, checkuser.UserName, clientId: context?.Client.ClientId));
+                        if (context != null)
+                        {
+                            if (context.IsNativeClient())
+                            {
+                                // The client is native, so this change in how to
+                                // return the response is for better UX for the end user.
+                                return this.LoadingPage("Redirect", model.ReturnUrl);
+                            }
+
+                            // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                            return Redirect(model.ReturnUrl);
+                        }
+                        // request for a local page
+                        if (Url.IsLocalUrl(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else if (string.IsNullOrEmpty(model.ReturnUrl))
+                        {
+                            return Redirect("~/");
+                        }
+                        else
+                        {
+                            // user might have clicked on a malicious link - should be logged
+                            throw new Exception("invalid return URL");
+                        }
+                    }
+                }
+            }
+            //se chegou aqui alguma coisa falhou
+            return View(model);
+        }
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
