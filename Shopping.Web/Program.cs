@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Logging;
 using Shopping.Web.Services;
 using Shopping.Web.Services.IServices;
-using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 

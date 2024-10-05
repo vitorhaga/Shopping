@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shopping.ProductAPI.Config;
@@ -38,12 +37,19 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("ApiScope", policy =>
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ApiScope", policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("scope", "shopping");
     });
+    options.AddPolicy("Admin", policy =>
+    {
+        //policy.RequireAuthenticatedUser();
+        policy.RequireRole("Admin");
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -77,9 +83,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-IdentityModelEventSource.ShowPII = true;
-System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -90,7 +93,11 @@ if (app.Environment.IsDevelopment())
 }
     
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
+
 app.ProductsEndpoints();
+
 app.Run();
