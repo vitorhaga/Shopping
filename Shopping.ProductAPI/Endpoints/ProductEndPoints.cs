@@ -26,7 +26,7 @@ namespace Shopping.ProductAPI.EndPoints
                     return Results.NotFound();
 
                 return Results.Ok(product);
-            }).RequireAuthorization();
+            });
 
             productEndpoint.MapPost(pattern: "Create", handler: async (IProductRepository repository, [FromBody] ProductDto productDto) =>
             {
