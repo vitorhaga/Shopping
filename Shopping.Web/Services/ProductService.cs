@@ -18,8 +18,8 @@ namespace Shopping.Web.Services
 
         public async Task<IEnumerable<ProductModel>> FindAllProducts(string token)
         {
-            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var response = await _client.GetAsync(BasePath + "/FindAll");
+            //_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.GetAsync($"{BasePath}/FindAll");
             return await response.ReadContentAs<List<ProductModel>>();
         }
 
