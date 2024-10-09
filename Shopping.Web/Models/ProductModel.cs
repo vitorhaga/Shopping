@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Web.Models
 {
@@ -10,6 +11,8 @@ namespace Shopping.Web.Models
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public string ImageUrl { get; set; }
+        [Range(1, 100)]
+        public int Count { get; set; } = 1;
 
         public string SubStringName()
         {
@@ -19,7 +22,7 @@ namespace Shopping.Web.Models
         public string SubStringDescription()
         {
             if (Description.Length < 24) return Description;
-            return $"{Description.Substring(0, 352)}...";
+            return $"{Description.Substring(0, 100)}...";
         }
     }
 }

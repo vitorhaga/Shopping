@@ -16,9 +16,8 @@ namespace Shopping.Web.Services
             _client = client ?? throw new ArgumentNullException(nameof(HttpClient));
         }
 
-        public async Task<IEnumerable<ProductModel>> FindAllProducts(string token)
+        public async Task<IEnumerable<ProductModel>> FindAllProducts()
         {
-            //_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await _client.GetAsync($"{BasePath}/FindAll");
             return await response.ReadContentAs<List<ProductModel>>();
         }

@@ -19,7 +19,7 @@ namespace Shopping.Web.Controllers
         [Authorize]
         public async Task<IActionResult> ProductIndex()
         {
-            var products = await _productService.FindAllProducts("");
+            var products = await _productService.FindAllProducts();
             return View(products);
         }        
         public IActionResult ProductCreate()
