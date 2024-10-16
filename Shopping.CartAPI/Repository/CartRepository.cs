@@ -20,6 +20,10 @@ namespace Shopping.CartAPI.Repository
         {
             throw new NotImplementedException();
         }
+        public async Task<bool> RemoveCoupon(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<bool> ClearCart(string userId)
         {
@@ -50,16 +54,6 @@ namespace Shopping.CartAPI.Repository
             return _mapper.Map<CartDto>(cart);
         }
 
-        public Task<CartDto> GetCartByUserId(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> RemoveCoupon(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> RemoveFromCart(long cartDetailsId)
         {
             try
@@ -87,7 +81,7 @@ namespace Shopping.CartAPI.Repository
             }
         }
 
-        public async Task<CartDto> SaveOrUpdareCart(CartDto cartDto)
+        public async Task<CartDto> SaveOrUpdateCart(CartDto cartDto)
         {
             Cart cart = _mapper.Map<Cart>(cartDto);
 
@@ -115,10 +109,10 @@ namespace Shopping.CartAPI.Repository
             {
                 var cartDetail = await _context.CartDetails.AsNoTracking()
                     .FirstOrDefaultAsync(
-                    p => p.ProductId == cartDto.CartDetails.FirstOrDefault().ProductId && 
+                    p => p.ProductId == cart.CartDetails.FirstOrDefault().ProductId && 
                     p.CartHeaderId == cartHeader.Id); 
 
-                if (cartHeader is CartHeader)
+                if (cartHeader is not CartHeader)
                 {
                     cart.CartDetails.FirstOrDefault().CartHeaderId = cartHeader.Id;
                     cart.CartDetails.FirstOrDefault().Product = null;
