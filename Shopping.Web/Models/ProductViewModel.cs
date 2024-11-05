@@ -20,7 +20,7 @@ namespace Shopping.Web.Models
         }
         public string SubStringDescription()
         {
-            if (Description.Length < 24) return Description;
+            if (Description.Length < 34) return Description;
             return $"{Description.Substring(0, 100)}...";
         }
     }
